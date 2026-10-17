@@ -6,8 +6,9 @@ import logging
 from collections.abc import Iterator
 from datetime import datetime
 
+from streamstats.constants import VAL_LEVELS
 from streamstats.errors import InvalidEventError, InvalidTimeErrors
-from streamstats.models import VAL_LEVELS, Log
+from streamstats.models import Log
 
 logger = logging.getLogger(__name__)
 
