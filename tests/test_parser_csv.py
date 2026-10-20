@@ -9,6 +9,7 @@ from streamstats.parsers import parser_csv
 
 
 def test_csv_parser_success(tmp_path: Path) -> None:
+    """Проверяет успешное чтение CSV-файла"""
     file = tmp_path / 'data.csv'
     file.write_text(
         'timestamp,level,source,message\n'
@@ -22,6 +23,7 @@ def test_csv_parser_success(tmp_path: Path) -> None:
     assert events[0].message == 'Родился'
 
 def test_broken_timestamp(tmp_path: Path) -> None:
+    """Проверяет выброс ошибки при неверной дате в csv"""
     file = tmp_path / 'broken.csv'
     file.write_text(
         'timestamp,level,source,message\n'
@@ -35,6 +37,7 @@ def test_broken_timestamp(tmp_path: Path) -> None:
     assert '2' in res
 
 def test_skip_invalid(tmp_path: Path) -> None:
+    """Проверяет пропуск плохоой строки при skip_invalid=True."""
     file = tmp_path / 'broken.csv'
     file.write_text(
         'timestamp,level,source,message\n'

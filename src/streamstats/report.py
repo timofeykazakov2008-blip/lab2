@@ -7,6 +7,7 @@ from streamstats.models import Stat
 
 
 def to_dict(stat: Stat) -> dict[str,Any]:
+    """Преобразует объект статистики Stat в словарь для JSON"""
     return{
         'total_event': stat.total,
         'SKIPPED_ROWS': stat.skip,
@@ -18,6 +19,7 @@ def to_dict(stat: Stat) -> dict[str,Any]:
     }
 
 def json_report(stat: Stat, path:str) ->None:
+    """Сохраняет статистику в JSON-файл по указанному пути"""
     data = to_dict(stat)
     with open(path, mode = 'w', encoding = 'utf-8') as f:
         json.dump(data, f, ensure_ascii = False, indent = 2)

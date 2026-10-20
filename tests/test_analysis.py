@@ -7,6 +7,7 @@ from streamstats.models import Log
 
 
 def test_empty() -> None:
+    """Проверяет пустую статистику"""
     stats = analysis([])
     assert stats.total == 0
     assert stats.skip == 0
@@ -15,6 +16,7 @@ def test_empty() -> None:
     assert stats.cnt_level == {}
 
 def test_analysis() -> None:
+    """Проверяет подсчет всего в анализе"""
     t1 = datetime(2008, 8, 18, 10, 0, 11)
     t2 = datetime(2025, 10, 15, 12, 0, 0)
     events = [
@@ -30,6 +32,7 @@ def test_analysis() -> None:
     assert stats.cnt_level == {'INFO': 1, 'ERROR': 1}
 
 def test_top_error_1() -> None:
+    """Проверяет сортировку источников ошибок по алфавиту"""
     t = datetime(2016, 9, 15, 0, 11, 0)
     events = [
         Log(t, 'ERROR', 'z', 'err'),
@@ -40,6 +43,7 @@ def test_top_error_1() -> None:
     assert stats.top_error == [('a', 1), ('b', 1), ('z', 1)]
 
 def test_top_error_2() -> None:
+    """Проверяет сортировку источников ошибок"""
     t = datetime(2016, 9, 15, 0, 11, 0)
     events = [
         Log(t, 'ERROR', 'z', 'err'),

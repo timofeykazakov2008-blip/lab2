@@ -6,6 +6,7 @@ from streamstats.models import Log
 
 
 def test_log_creation_valid() -> None:
+    """Проверяет создание объекта Log"""
     ts = datetime(2008, 8, 18, 10, 0, 0)
     event = Log(
         timestamp=ts,
@@ -20,6 +21,7 @@ def test_log_creation_valid() -> None:
 
 
 def test_log_equality() -> None:
+    """Проверяет равенство двух одинаковых объектов Log"""
     ts = datetime(2008, 8, 18, 10, 0, 0)
     event1 = Log(ts, 'ERROR', 'db', 'Ошибка')
     event2 = Log(ts, 'ERROR', 'db', 'Ошибка')

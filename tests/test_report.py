@@ -8,6 +8,7 @@ from streamstats.report import json_report
 
 
 def test_json_report(tmp_path: Path) -> None:
+    """Проверяет сохранение отчета в JSON-файл"""
     stats = analysis([])
     output = tmp_path / 'report.json'
     json_report(stats, str(output))

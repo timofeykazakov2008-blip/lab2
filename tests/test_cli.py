@@ -7,6 +7,7 @@ from streamstats.__main__ import main
 
 
 def test_cli(tmp_path: Path) -> None:
+    """Проверяет успешный запуск CLI и создание отчет"""
     file = tmp_path / 'go.csv'
     file.write_text(
         'timestamp,level,source,message\n'
@@ -21,6 +22,7 @@ def test_cli(tmp_path: Path) -> None:
     assert data['total_event'] == 1
 
 def test_cli_broke(tmp_path: Path) -> None:
+    """Проверяет возврат кода 2 при ошибке без --skip-invalid"""
     file = tmp_path / 'go.csv'
     file.write_text(
         'timestamp,level,source,message\n'
@@ -32,6 +34,7 @@ def test_cli_broke(tmp_path: Path) -> None:
     assert exit_code == 2
 
 def test_cli_skip_invalid(tmp_path: Path) -> None:
+    """Проверяет успешный запуск CLI с флагом --skip-invalid"""
     file = tmp_path / 'go.csv'
     file.write_text(
         'timestamp,level,source,message\n'

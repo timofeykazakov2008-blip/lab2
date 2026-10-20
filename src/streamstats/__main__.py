@@ -13,8 +13,10 @@ from streamstats.report import json_report
 
 
 def logging_fix() -> None:
+    """Настраивает базовое логирование уровня WARNING"""
     logging.basicConfig(level = logging.WARNING, format = '%(levelname)s: %(message)s')
 def crt_parser() -> argparse.ArgumentParser:
+    """Создает парсер аргументов командной строки"""
     parser = argparse.ArgumentParser(prog = 'streamstats', description = 'Потоковый анализатор лог-файлов CSV и JSONL')
     parsers = parser.add_subparsers(dest="command", required=True)
     analyze = parsers.add_parser('analyze', help = 'Анализ логов')
@@ -25,6 +27,7 @@ def crt_parser() -> argparse.ArgumentParser:
     return parser
 
 def stream(file: list[str], format: str, skip_invalid: bool) -> Iterable[Log | None]:
+    """Объединяет чтение нескольких файлов в единый поток событий"""
     for files in file:
         if format == 'csv':
             yield from parser_csv(files,skip_invalid)
@@ -33,6 +36,7 @@ def stream(file: list[str], format: str, skip_invalid: bool) -> Iterable[Log | N
         else:
             raise StreamsStatsErrors(f'Неподдерживаемый файл: {format}')
 def main(argv: list[str] | None = None) -> int:
+    """Запускает CLI и возвращает код завершения"""
     logging_fix()
     parser = crt_parser()
     try:

@@ -9,6 +9,7 @@ from streamstats.parsers import parser_json
 
 
 def test_json_parser(tmp_path: Path) -> None:
+    """Проверяет обычный JSON"""
     file = tmp_path / 'data.json'
     file.write_text(
         '{"timestamp": "2008-08-18T00:00:00", "level": "WARNING", "source": "auth", "message": "Сбой"}\n',
@@ -21,6 +22,7 @@ def test_json_parser(tmp_path: Path) -> None:
     assert events[0].source == 'auth'
 
 def test_json_parser_error(tmp_path: Path) -> None:
+    """Проверяет ошибку и номер строки при битом JSON"""
     file = tmp_path / 'data.json'
     good_line = '{"timestamp": "2008-08-18T00:00:00", "level": "INFO", "source": "s", "message": "mem"}\n'
     bad_line = '{"timestamp": "2008-08-18T00:00:00", убийца}\n'

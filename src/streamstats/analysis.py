@@ -8,6 +8,7 @@ from streamstats.models import Log, Stat
 
 
 def analysis(event: Iterable[Log | None]) -> Stat:
+    """Анализирует поток событий за один проход и возвращает статистику"""
     total = 0
     skip = 0
     timestamp_st: datetime | None = None

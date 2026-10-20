@@ -13,6 +13,7 @@ from streamstats.models import Log
 logger = logging.getLogger(__name__)
 
 def check_time(time:str, file:str, line:int) -> datetime:
+    """Проверяет корректную запись времени/datetime"""
     clean_time = time.strip()
     if not clean_time:
         raise InvalidTimeErrors(
@@ -30,6 +31,7 @@ def check_time(time:str, file:str, line:int) -> datetime:
         ) from error
 
 def validate(row:list[str], file:str, line:int) -> Log:
+    """Валидирует поля одной строки CSV и конструирует объект Log"""
     if len(row) != 4:
         raise InvalidEventError(
             f"Не 4 поля, получено {len(row)}",
@@ -60,6 +62,7 @@ def validate(row:list[str], file:str, line:int) -> Log:
     )
 
 def validate_json(data: dict[str, object], file:str,line:int) -> Log:
+    """Валидирует словарь, полученный из JSONL-строки и конструирует объект Log"""
     keys = {'timestamp', 'level', 'source', 'message'}
     if not keys.issubset(data.keys()):
         skip = keys - set(data.keys())
@@ -107,6 +110,7 @@ def validate_json(data: dict[str, object], file:str,line:int) -> Log:
         message = message
     )
 def parser_csv(file: str, skip_invalid: bool = False) -> Iterator[Log | None]:
+    """Построчно читает CSV-файл и генерирует объекты Log"""
     with open(file, mode="r", encoding="utf-8") as f:
         reader = csv.reader(f)
         try:
@@ -133,6 +137,7 @@ def parser_csv(file: str, skip_invalid: bool = False) -> Iterator[Log | None]:
                     raise
 
 def parser_json(file: str, skip_invalid: bool = False) -> Iterator[Log | None]:
+    """Построчно читает JSONL-файл и генерирует объекты Log"""
     with open(file, mode="r", encoding="utf-8") as f:
         for line_number, line in enumerate(f, start = 1):
             clean_line = line.strip()
