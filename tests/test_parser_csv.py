@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from streamstats.errors import InvalidTimeErrors
-from streamstats.parsers import parser_csv
+from streamstats.parsers import PARSER_REG, parser_csv, reg_parsers
 
 
 def test_csv_parser_success(tmp_path: Path) -> None:
@@ -51,3 +51,10 @@ def test_skip_invalid(tmp_path: Path) -> None:
     assert res[1] is not None
     assert res[1].message == 'Родился'
 
+def test_parser_reg() -> None:
+    """Проверяет регистрацию пользовательского формата в реестре."""
+    def parser(file: str, skip: bool):
+        yield None
+    reg_parsers('cus', parser)
+    assert 'cus' in PARSER_REG
+    assert PARSER_REG['cus'] is parser

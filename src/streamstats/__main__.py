@@ -8,7 +8,7 @@ from collections.abc import Iterable
 from streamstats.analysis import analysis
 from streamstats.errors import StreamsStatsErrors
 from streamstats.models import Log
-from streamstats.parsers import parser_csv, parser_json
+from streamstats.parsers import PARSER_REG
 from streamstats.report import json_report
 
 
@@ -28,13 +28,11 @@ def crt_parser() -> argparse.ArgumentParser:
 
 def stream(file: list[str], format: str, skip_invalid: bool) -> Iterable[Log | None]:
     """Объединяет чтение нескольких файлов в единый поток событий"""
+    parsers_func = PARSER_REG.get(format)
+    if parsers_func is None:
+        raise StreamsStatsErrors(f'Неподдерживаемый файл: {format}')
     for files in file:
-        if format == 'csv':
-            yield from parser_csv(files,skip_invalid)
-        elif format == 'jsonl':
-            yield from parser_json(files,skip_invalid)
-        else:
-            raise StreamsStatsErrors(f'Неподдерживаемый файл: {format}')
+        yield from parsers_func(files, skip_invalid)
 def main(argv: list[str] | None = None) -> int:
     """Запускает CLI и возвращает код завершения"""
     logging_fix()

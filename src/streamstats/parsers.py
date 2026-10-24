@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 import json
 import logging
-from collections.abc import Iterator
+from collections.abc import Callable, Iterable, Iterator
 from datetime import datetime
 
 from streamstats.constants import VAL_LEVELS
@@ -165,6 +165,11 @@ def parser_json(file: str, skip_invalid: bool = False) -> Iterator[Log | None]:
                     yield None
                 else:
                     raise
-
-
-                
+Parsers = Callable[[str,bool], Iterable[Log | None]]
+PARSER_REG: dict[str, Parsers] = {
+    'jsonl': parser_json,
+    'csv': parser_csv
+}
+def reg_parsers(format_parser: str, parsers_func: Parsers) -> None:
+    """Регистрирует парсер для нового формата"""
+    PARSER_REG[format_parser] = parsers_func
